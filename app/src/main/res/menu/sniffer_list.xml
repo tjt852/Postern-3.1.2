@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@id/sniffer_refresh" android:title="@string/sniffer_refresh" android:showAsAction="never" />
+    <item android:id="@id/sniffer_record" android:title="@string/sniffer_record" android:showAsAction="never" />
+    <item android:id="@id/sniffer_conn" android:title="@string/sniffer_conn" android:showAsAction="never" />
+</menu>

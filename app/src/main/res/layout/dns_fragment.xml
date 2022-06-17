@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="vertical" android:padding="8.0dip" android:layout_width="fill_parent" android:layout_height="fill_parent"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+        <CheckBox android:id="@id/dns_auto" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/dns_auto_enable" />
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/dns_server_str" />
+        <EditText android:id="@id/dns_edit" android:layout_width="fill_parent" android:layout_height="wrap_content" android:singleLine="true" />
+        <Button android:id="@id/save_dns" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/save" />
+        <Button android:id="@id/cancel_dns" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/cancel" />
+    </LinearLayout>
+</ScrollView>

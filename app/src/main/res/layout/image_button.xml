@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout android:id="@id/image_button_layout" android:layout_width="wrap_content" android:layout_height="wrap_content"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+        <ImageView android:id="@id/rl_button_image" android:focusable="false" android:focusableInTouchMode="false" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" />
+        <TextView android:textSize="17.0sp" android:id="@id/rl_button_text_big" android:focusable="false" android:focusableInTouchMode="false" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_toRightOf="@id/rl_button_image" android:layout_alignTop="@id/rl_button_image" />
+        <TextView android:textSize="12.0sp" android:textColor="#ff909090" android:id="@id/rl_button_text_small" android:focusable="false" android:focusableInTouchMode="false" android:clickable="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/rl_button_text_big" android:layout_alignLeft="@id/rl_button_text_big" />
+    </RelativeLayout>
+    <View android:background="#ff909090" android:layout_width="wrap_content" android:layout_height="1.0dip" />
+</LinearLayout>

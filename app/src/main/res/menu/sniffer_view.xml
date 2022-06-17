@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@id/view_hex" android:title="@string/view_hex" android:showAsAction="never" />
+    <item android:id="@id/view_ascii" android:title="@string/view_ascii" android:showAsAction="never" />
+    <item android:id="@id/view_hex_ascii" android:title="@string/view_hex_ascii" android:showAsAction="never" />
+</menu>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="vertical" android:padding="8.0dip" android:layout_width="fill_parent" android:layout_height="fill_parent"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/hostname" />
+        <EditText android:id="@id/host_edit" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="1" android:singleLine="true" />
+        <TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/ipname" />
+        <EditText android:id="@id/ip_edit" android:layout_width="fill_parent" android:layout_height="wrap_content" android:maxLines="1" android:singleLine="true" />
+        <Button android:id="@id/save_hostip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/save" />
+        <Button android:id="@id/cancel_hostip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/cancel" />
+        <Button android:id="@id/delete_hostip" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/delete" />
+    </LinearLayout>
+</ScrollView>

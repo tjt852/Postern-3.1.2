@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="options_vpnon_array">
+        <item>Import Proxy/Rule</item>
+        <item>Proxy</item>
+        <item>Rules</item>
+        <item>Proxy Group</item>
+        <item>Hosts</item>
+        <item>DNS</item>
+        <item>Sniffer</item>
+        <item>VPN On</item>
+        <item>About</item>
+    </string-array>
+    <string-array name="options_vpnoff_array">
+        <item>Import Proxy/Rule</item>
+        <item>Proxy</item>
+        <item>Rules</item>
+        <item>Proxy Group</item>
+        <item>Hosts</item>
+        <item>DNS</item>
+        <item>Sniffer</item>
+        <item>VPN Off</item>
+        <item>About</item>
+    </string-array>
+    <array name="option_icon_array">
+        <item>@drawable/ic_import_white</item>
+        <item>@drawable/ic_vpn_white</item>
+        <item>@drawable/ic_rule_white</item>
+        <item>@drawable/ic_proxy_group_white</item>
+        <item>@drawable/ic_hosts_white</item>
+        <item>@drawable/ic_dns_white</item>
+        <item>@drawable/ic_sniffer_white</item>
+        <item>@drawable/ic_vpn_switch</item>
+        <item>@drawable/ic_about_white</item>
+    </array>
+    <string-array name="proxy_type_array">
+        <item>SSH2</item>
+        <item>Shadowsocks</item>
+        <item>SOCKS5</item>
+        <item>HTTPS/HTTP CONNECT</item>
+        <item>GFW.press(experimental)</item>
+    </string-array>
+    <string-array name="encryption_array">
+        <item>rc4</item>
+        <item>rc4-md5</item>
+        <item>aes-128-cfb</item>
+        <item>aes-192-cfb</item>
+        <item>aes-256-cfb</item>
+        <item>bf-cfb</item>
+        <item>camellia-128-cfb</item>
+        <item>camellia-192-cfb</item>
+        <item>camellia-256-cfb</item>
+        <item>cast5-cfb</item>
+        <item>des-cfb</item>
+        <item>idea-cfb</item>
+        <item>rc2-cfb</item>
+        <item>salsa20</item>
+        <item>chacha20</item>
+        <item>chacha20-ietf</item>
+    </string-array>
+    <string-array name="rule_type_array">
+        <item>Match Geographic IP</item>
+        <item>Match CIDR IP</item>
+        <item>Match Domain Keyword</item>
+        <item>Match Domain Suffix</item>
+        <item>Match Domain</item>
+        <item>Match All</item>
+    </string-array>
+    <string-array name="rule_action_array">
+        <item>Direct</item>
+        <item>Proxy/Tunnel</item>
+        <item>Block</item>
+        <item>Smart Select</item>
+        <item>Proxy Group</item>
+    </string-array>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="fill_parent" android:layout_height="wrap_content"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="vertical" android:id="@id/proxy_layout" android:padding="8.0dip" android:layout_width="fill_parent" android:layout_height="fill_parent"
+      xmlns:android="http://schemas.android.com/apk/res/android">
+        <Button android:id="@id/import_local" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/import_from_local" />
+        <View android:background="#ff909090" android:layout_width="wrap_content" android:layout_height="2.0dip" />
+        <EditText android:id="@id/url_input" android:layout_width="fill_parent" android:layout_height="wrap_content" android:hint="Configuration URL" android:maxLines="1" android:singleLine="true" />
+        <Button android:id="@id/import_url" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="@string/import_from_url" />
+        <ProgressBar android:id="@id/import_progress_bar" android:visibility="gone" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_centerVertical="true" style="?android:attr/progressBarStyleLarge" />
+    </LinearLayout>
+</ScrollView>

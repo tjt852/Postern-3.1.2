@@ -1,0 +1,23 @@
+!!brut.androlib.meta.MetaInfo
+apkFileName: Postern-3.1.2.apk
+compressionType: false
+doNotCompress:
+- resources.arsc
+- png
+isFrameworkApk: false
+packageInfo:
+  forcedPackageId: '127'
+  renameManifestPackage: null
+sdkInfo:
+  minSdkVersion: '16'
+sharedLibrary: false
+sparseResources: true
+unknownFiles: {}
+usesFramework:
+  ids:
+  - 1
+  tag: null
+version: '@version@'
+versionInfo:
+  versionCode: '28'
+  versionName: 3.1.2

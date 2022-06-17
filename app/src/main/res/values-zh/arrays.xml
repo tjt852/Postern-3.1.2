@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="options_vpnon_array">
+        <item>导入代理/规则</item>
+        <item>配置代理</item>
+        <item>配置规则</item>
+        <item>配置代理组</item>
+        <item>配置Hosts文件</item>
+        <item>DNS</item>
+        <item>抓包器</item>
+        <item>打开VPN</item>
+        <item>关于</item>
+    </string-array>
+    <string-array name="options_vpnoff_array">
+        <item>导入代理/规则</item>
+        <item>配置代理</item>
+        <item>配置规则</item>
+        <item>配置代理组</item>
+        <item>配置Hosts文件</item>
+        <item>DNS</item>
+        <item>抓包器</item>
+        <item>关闭VPN</item>
+        <item>关于</item>
+    </string-array>
+    <array name="option_icon_array">
+        <item>@drawable/ic_import_white</item>
+        <item>@drawable/ic_vpn_white</item>
+        <item>@drawable/ic_rule_white</item>
+        <item>@drawable/ic_proxy_group_white</item>
+        <item>@drawable/ic_hosts_white</item>
+        <item>@drawable/ic_dns_white</item>
+        <item>@drawable/ic_sniffer_white</item>
+        <item>@drawable/ic_vpn_switch</item>
+        <item>@drawable/ic_about_white</item>
+    </array>
+    <string-array name="proxy_type_array">
+        <item>SSH2</item>
+        <item>Shadowsocks</item>
+        <item>SOCKS5</item>
+        <item>HTTPS/HTTP CONNECT</item>
+        <item>大杀器GFW.press(试验性支持)</item>
+    </string-array>
+    <string-array name="encryption_array">
+        <item>rc4</item>
+        <item>rc4-md5</item>
+        <item>aes-128-cfb</item>
+        <item>aes-192-cfb</item>
+        <item>aes-256-cfb</item>
+        <item>bf-cfb</item>
+        <item>camellia-128-cfb</item>
+        <item>camellia-192-cfb</item>
+        <item>camellia-256-cfb</item>
+        <item>cast5-cfb</item>
+        <item>des-cfb</item>
+        <item>idea-cfb</item>
+        <item>rc2-cfb</item>
+        <item>salsa20</item>
+        <item>chacha20</item>
+        <item>chacha20-ietf</item>
+    </string-array>
+    <string-array name="rule_type_array">
+        <item>匹配国家IP</item>
+        <item>匹配CIDR IP</item>
+        <item>匹配域名关键字</item>
+        <item>匹配域名后缀</item>
+        <item>匹配精确域名</item>
+        <item>匹配所有地址</item>
+    </string-array>
+    <string-array name="rule_action_array">
+        <item>直连</item>
+        <item>通过代理连接</item>
+        <item>屏蔽</item>
+        <item>智能选择</item>
+        <item>代理组</item>
+    </string-array>
+</resources>
