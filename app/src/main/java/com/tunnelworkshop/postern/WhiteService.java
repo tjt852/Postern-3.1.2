@@ -10,21 +10,100 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 
 public class WhiteService extends Service {
     private static final String TAG = WhiteService.class.getSimpleName();
     private static final int NOTIFICATION_FLAG = 0X11;
 
+    private static final int RECEIVE_MESSAGE_CODE = 0x0001;
+
+    private static final int SEND_MESSAGE_CODE = 0x0002;
+
+    //clientMessenger表示的是客户端的Messenger，可以通过来自于客户端的Message的replyTo属性获得，
+    //其内部指向了客户端的ClientHandler实例，可以用clientMessenger向客户端发送消息
+    private Messenger clientMessenger = null;
+
+    //serviceMessenger是Service自身的Messenger，其内部指向了ServiceHandler的实例
+    //客户端可以通过IBinder构建Service端的Messenger，从而向Service发送消息，
+    //并由ServiceHandler接收并处理来自于客户端的消息
+    private final Messenger serviceMessenger = new Messenger(new ServiceHandler(Looper.getMainLooper()));
+
+    static Queue<String> QUEUE = new LinkedList<>();
+
+    //MyService用ServiceHandler接收并处理来自于客户端的消息
+    private class ServiceHandler extends Handler {
+
+        public ServiceHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Log.i("DemoLog", "ServiceHandler -> handleMessage");
+            if (msg.what == RECEIVE_MESSAGE_CODE) {
+                Bundle data = msg.getData();
+                if (data != null) {
+                    String result = data.getString("msg");
+                    Log.i("DemoLog", "MyService收到客户端如下信息: " + result);
+                }
+                //通过Message的replyTo获取到客户端自身的Messenger，
+                //Service可以通过它向客户端发送消息
+                clientMessenger = msg.replyTo;
+                if (clientMessenger != null) {
+                    Log.i("DemoLog", "MyService向客户端回信");
+                    Message msgToClient = Message.obtain();
+                    msgToClient.what = SEND_MESSAGE_CODE;
+                    //可以通过Bundle发送跨进程的信息
+                    Bundle bundle = new Bundle();
+
+                    String data1 = QUEUE.poll();
+                    if (!TextUtils.isEmpty(data1)) {
+                        bundle.putString("msg", "OK");
+                        bundle.putString("data", data1);
+                    } else {
+                        bundle.putString("msg", "error");
+                    }
+
+                    msgToClient.setData(bundle);
+                    try {
+                        clientMessenger.send(msgToClient);
+                    } catch (RemoteException e) {
+                        e.printStackTrace();
+                        Log.e("DemoLog", "MyService向客户端发送信息失败: " + e.getMessage());
+                    }
+                }
+            }
+        }
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(TAG, "onBind");
-        throw new UnsupportedOperationException("Not yet implemented");
+        Log.i("DemoLog", "MyServivce -> onBind");
+        //获取Service自身Messenger所对应的IBinder，并将其发送共享给所有客户端
+        return serviceMessenger.getBinder();
+    }
+
+    @Override
+    public void onCreate() {
+        Log.i("DemoLog", "MyService -> onCreate");
+//        QUEUE.offer("nihaoya tjt");
+        super.onCreate();
     }
 
     @Override
@@ -103,7 +182,8 @@ public class WhiteService extends Service {
         super.onDestroy();
         // 停止前台服务--参数：表示是否移除之前的通知
         stopForeground(true);
-        Log.d(TAG, "onDestroy");
+        Log.i("DemoLog", "MyService -> onDestroy");
+        clientMessenger = null;
     }
 
 }

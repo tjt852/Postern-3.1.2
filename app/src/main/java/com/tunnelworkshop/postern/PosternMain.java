@@ -28,6 +28,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -160,6 +161,7 @@ public class PosternMain extends Activity {
     public void onCreate(Bundle var1) {
         super.onCreate(var1);
         this.setContentView(2130903041);
+        startService(new Intent(this, WhiteService.class));
         Log.d("Postern", "onCreate");
         this.bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter var2 = new IntentFilter();
@@ -258,6 +260,14 @@ public class PosternMain extends Activity {
         this.onMightImportFile(this.getIntent());
 
 //        startService(new Intent(this, WhiteService.class));
+
+//        EndProgram.end();
+//
+//        try {
+//            ZipUtils.zipFile("/sdcard/in.mohalla.video", "/sdcard/gaid_pkgname_day0.zip");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     protected void onDestroy() {

@@ -1,8 +1,12 @@
 package com.tunnelworkshop.postern;
 
+import static com.tunnelworkshop.postern.WhiteService.QUEUE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -42,17 +46,31 @@ public class in_mohalla_video {
     private static final String STRING_TO_BE_TYPED = "UiAutomator";
     private UiDevice device;
 
+    final StringBuilder dataBuilder = new StringBuilder();
+
     @Test
     public void useAppContext() throws InterruptedException {
         // Context of the app under test.
         // Initialize UiDevice instance
-        String phoneId = null;
+        Context context = ApplicationProvider.getApplicationContext();
+        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+
+        String callbackurl = null;
         String targetpkg = null;
         String message = "";
+        String data = "";
         int status = 0;
+        dataBuilder.reverse();
+        DataReceiver.registerReceiver(context, dataBuilder);
+        synchronized (dataBuilder){
+            Log.i(STRING_TO_BE_TYPED,"等待广播数据中.....");
+            dataBuilder.wait();
+        }
+        Log.i(STRING_TO_BE_TYPED,"接受广播数据完成..");
+
         try {
             Bundle extras = InstrumentationRegistry.getArguments();
-
+            extras.putString("data", dataBuilder.toString());
             //proxyname
             //proxypass
             //proxyserver
@@ -64,15 +82,16 @@ public class in_mohalla_video {
             String proxyserver = extras.getString("proxyserver");
             String proxyport = extras.getString("proxyport");
             targetpkg = extras.getString("targetpkg");
-            phoneId = extras.getString("phoneid");
-
+            callbackurl = new String(Base64.decode(extras.getString("callbackurl"), Base64.DEFAULT));
+            callbackurl = callbackurl.replaceAll("=", "_");
+            data = new String(Base64.decode(extras.getString("data"), Base64.DEFAULT));
+            QUEUE.offer(data);
             System.out.println("proxyname=" + proxyname + ", proxypass=" + proxypass + "， proxyserver=" + proxyserver + "， proxyport=" + proxyport
-                    + "， targetpkg=" + targetpkg + "， phoneId=" + phoneId);
+                    + "， targetpkg=" + targetpkg + "， callbackurl=" + callbackurl);
 
             String[] nameArray = proxyname.split("-");
             String country = nameArray[nameArray.length - 1];
 
-            device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
             // Start from the home screen
             device.pressHome();
@@ -81,7 +100,6 @@ public class in_mohalla_video {
             device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)),
                     LAUNCH_TIMEOUT);
 
-            Context context = ApplicationProvider.getApplicationContext();
             // Launch the app
 //        String package_name = "com.tunnelworkshop.postern";
 //        String activity_path = "com.tunnelworkshop.postern.PosternMain";
@@ -118,7 +136,7 @@ public class in_mohalla_video {
 
             intent = context.getPackageManager().getLaunchIntentForPackage(targetpkg);
             if (intent == null) {
-                httpRequest(phoneId, 2, "targetpkg " + targetpkg + " is not install");
+                httpRequest(callbackurl, 2, "targetpkg " + targetpkg + " is not install");
                 return;
             }
             intent.setPackage(null);
@@ -131,8 +149,8 @@ public class in_mohalla_video {
 //                    .className("in.mohalla.video:id/secondaryText"));
 
             SearchCondition<UiObject2> search = Until.findObject(By.res("in.mohalla.video:id/secondaryText").text("Hindi"));
-            UiObject2 selectTxt = device.wait(search,10000);
-            if (selectTxt.isEnabled()) {
+            UiObject2 selectTxt = device.wait(search, 10000);
+            if (selectTxt!=null && selectTxt.isEnabled()) {
                 selectTxt.click(4000);
             }
 //            Thread.sleep(4000);
@@ -142,7 +160,7 @@ public class in_mohalla_video {
             long runTime = 1000 * 60 * (2 + minute);
             System.out.println("test running time is " + runTime + " millis");
             while (true) {
-                pass(targetpkg);
+//                pass(targetpkg);
                 long currentTime = System.currentTimeMillis() - startTime;
                 int p = new Random().nextInt(200);
 
@@ -177,7 +195,7 @@ public class in_mohalla_video {
         PosternApp var7 = (PosternApp) ApplicationProvider.getApplicationContext();
         PosternVpnService var8 = var7.getVpnService();
         var8.revertPosternVpnService();
-        httpRequest(phoneId, status, message);
+        httpRequest(callbackurl, status, message);
     }
 
     public void pass(String targetpkg) {
@@ -209,10 +227,10 @@ public class in_mohalla_video {
         device.swipe(x / 2, y / 2, x / 2, (int) (y / 1.2), time);//下滑
     }
 
-    public static void httpRequest(String phoneId, int status, String message) {
+    public static void httpRequest(String callbackurl, int status, String message) {
         HttpURLConnection var9 = null;
         try {
-            URL var23 = new URL("http://159.138.154.119:7001/addListenerTJT?phoneid=" + phoneId + "&status=" + status + "&msg=" + URLEncoder.encode(message, "UTF-8"));
+            URL var23 = new URL(callbackurl + "&status=" + status + "&msg=" + URLEncoder.encode(message, "UTF-8"));
             (var9 = (HttpURLConnection) var23.openConnection()).setReadTimeout(30000);
             var9.setConnectTimeout(30000);
             var9.setRequestMethod("GET");

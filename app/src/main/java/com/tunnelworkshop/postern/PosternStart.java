@@ -21,11 +21,9 @@ public class PosternStart {
         var2.setOta(false);
         var6.addProxy(var2);
         PosternApp var11 = (PosternApp) context.getApplicationContext();
-        ProxyChain var7 = var11.getCurrEditPC();
 
-        if (var7 != null) {
-            editFragment.delpc(var7.getName());
-        }
+        editFragment.delpc("brightdata");
+
         if (editFragment.addpc(var6.toBytes()) == 0) {
             Log.d("Postern", "add succeed");
         } else {
@@ -38,6 +36,7 @@ public class PosternStart {
 
     public static void createRule(Context context) {
         RuleEditFragment ruleEditFragment = new RuleEditFragment();
+
         ruleEditFragment.ruledel(1);
         ruleEditFragment.ruledel(2);
         RuleGroup var5 = new RuleGroup();
@@ -46,13 +45,13 @@ public class PosternStart {
         var5.setPcpgname("brightdata");
         Rule var11 = Rule.buildRuleFromString(5, "*");
         var5.addRule(var11);
-
         PosternApp var14 = (PosternApp) context.getApplicationContext();
+
 //        var5.setId(var14.getRuleEditID());
         var5.setId(-1);
         ruleEditFragment.ruleinsert(-1, var5.serialize());
 //        if (var14.getRuleEditState() == 1) {
-//            //var14.getRuleEditID()=1
+//            ruleEditFragment.ruleinsert(-1, var5.serialize());
 //
 //        } else {
 //            var5.setId(var14.getRuleEditID());
