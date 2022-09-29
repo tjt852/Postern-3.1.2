@@ -22,8 +22,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import com.tunnelworkshop.postern.control.Cache;
 
 
 public class WhiteService extends Service {
@@ -43,7 +42,6 @@ public class WhiteService extends Service {
     //并由ServiceHandler接收并处理来自于客户端的消息
     private final Messenger serviceMessenger = new Messenger(new ServiceHandler(Looper.getMainLooper()));
 
-    static Queue<String> QUEUE = new LinkedList<>();
 
     //MyService用ServiceHandler接收并处理来自于客户端的消息
     private class ServiceHandler extends Handler {
@@ -65,19 +63,26 @@ public class WhiteService extends Service {
                 //Service可以通过它向客户端发送消息
                 clientMessenger = msg.replyTo;
                 if (clientMessenger != null) {
+
+                    if (Cache.PHONE.state != Cache.PhoneData.State.READY) {
+                        Log.e("DemoLog", "数据没有准备号，error");
+                        return;
+                    }
                     Log.i("DemoLog", "MyService向客户端回信");
                     Message msgToClient = Message.obtain();
                     msgToClient.what = SEND_MESSAGE_CODE;
                     //可以通过Bundle发送跨进程的信息
                     Bundle bundle = new Bundle();
 
-                    String data1 = QUEUE.poll();
+                    String data1 = Cache.PHONE.data;
                     if (!TextUtils.isEmpty(data1)) {
                         bundle.putString("msg", "OK");
                         bundle.putString("data", data1);
                     } else {
                         bundle.putString("msg", "error");
                     }
+
+                    Cache.PHONE.state = Cache.PhoneData.State.NONE;
 
                     msgToClient.setData(bundle);
                     try {

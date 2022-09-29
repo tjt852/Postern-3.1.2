@@ -3,6 +3,9 @@ allprojects {
     buildscript {
         repositories {
             google()
+            maven {
+                url 'http://mirrors.huaweicloud.com/repository/maven/'
+            }
             mavenCentral()
             jcenter()
         }

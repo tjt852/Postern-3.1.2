@@ -12,23 +12,22 @@ import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.legacy.app.ActionBarDrawerToggle;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
-import java.io.IOException;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.legacy.app.ActionBarDrawerToggle;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.tunnelworkshop.postern.control.AppCacheManager;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
@@ -161,7 +160,6 @@ public class PosternMain extends Activity {
     public void onCreate(Bundle var1) {
         super.onCreate(var1);
         this.setContentView(2130903041);
-        startService(new Intent(this, WhiteService.class));
         Log.d("Postern", "onCreate");
         this.bManager = LocalBroadcastManager.getInstance(this);
         IntentFilter var2 = new IntentFilter();
@@ -261,14 +259,16 @@ public class PosternMain extends Activity {
 
 //        startService(new Intent(this, WhiteService.class));
 
-//        EndProgram.end();
-//
-//        try {
-//            ZipUtils.zipFile("/sdcard/in.mohalla.video", "/sdcard/gaid_pkgname_day0.zip");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new AppCacheManager().saveCache();
+            }
+        }).start();
+
     }
+
 
     protected void onDestroy() {
         super.onDestroy();
@@ -310,6 +310,7 @@ public class PosternMain extends Activity {
     protected void onResume() {
         super.onResume();
         Log.d("Postern", "onResume");
+        startService(new Intent(this, WhiteService.class));
     }
 
     protected void onSaveInstanceState(Bundle var1) {
@@ -328,33 +329,33 @@ public class PosternMain extends Activity {
 
     protected void onStart() {
         super.onStart();
-        Intent intent = getIntent();
-        if (intent != null) {
-            proxyname = intent.getStringExtra("proxyname");
-            proxypass = intent.getStringExtra("proxypass");
-            proxyserver = intent.getStringExtra("proxyserver");
-            proxyport = intent.getIntExtra("proxyport", -1);
-            Log.d("Postern", "onStart getIntent proxyname="
-                    + proxyname +
-                    ", proxypass=" +
-                    proxypass +
-                    ", proxyserver=" +
-                    proxyserver
-                    + ", proxyport=" +
-                    proxyport);
-        }
-
-        Log.d("Postern", "onStart");
-        if (((PosternApp) this.getApplicationContext()).getVpnState() == 0) {
-            if (!TextUtils.isEmpty(proxyname) &&
-                    !TextUtils.isEmpty(proxypass) &&
-                    !TextUtils.isEmpty(proxyserver) &&
-                    proxyport != -1) {
-                PosternStart.createProxy(this, proxyname, proxypass, proxyserver, proxyport);
-                PosternStart.createRule(this);
-            }
-            this.launchVpn();
-        }
+//        Intent intent = getIntent();
+//        if (intent != null) {
+//            proxyname = intent.getStringExtra("proxyname");
+//            proxypass = intent.getStringExtra("proxypass");
+//            proxyserver = intent.getStringExtra("proxyserver");
+//            proxyport = intent.getIntExtra("proxyport", -1);
+//            Log.d("Postern", "onStart getIntent proxyname="
+//                    + proxyname +
+//                    ", proxypass=" +
+//                    proxypass +
+//                    ", proxyserver=" +
+//                    proxyserver
+//                    + ", proxyport=" +
+//                    proxyport);
+//        }
+//
+//        Log.d("Postern", "onStart");
+//        if (((PosternApp) this.getApplicationContext()).getVpnState() == 0) {
+//            if (!TextUtils.isEmpty(proxyname) &&
+//                    !TextUtils.isEmpty(proxypass) &&
+//                    !TextUtils.isEmpty(proxyserver) &&
+//                    proxyport != -1) {
+//                PosternStart.createProxy(this, proxyname, proxypass, proxyserver, proxyport);
+//                PosternStart.createRule(this);
+//            }
+//            this.launchVpn();
+//        }
 
 
     }
