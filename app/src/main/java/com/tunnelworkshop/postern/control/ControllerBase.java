@@ -1,14 +1,24 @@
 package com.tunnelworkshop.postern.control;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
+import androidx.test.uiautomator.Until;
+
+import com.tunnelworkshop.postern.PosternApp;
+import com.tunnelworkshop.postern.PosternVpnService;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -18,16 +28,31 @@ public abstract class ControllerBase {
 
     private static final int LAUNCH_TIMEOUT = 5000;
 
+    private static final String BASIC_SAMPLE_PACKAGE
+            = "com.tunnelworkshop.postern";
+
     public UiDevice device;
 
     public Context context;
 
     public Parameters parameters;
 
+    public String message = "";
+
+    public int status = 0;
+
     public void useAppContext() {
         context = ApplicationProvider.getApplicationContext();
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         initParameters();
+
+        beginOperate();
+
+        autoUiOperate();
+
+        endOperate();
+
+
     }
 
     private void initParameters() {
@@ -55,12 +80,91 @@ public abstract class ControllerBase {
     public abstract void autoUiOperate();
 
     public void beginOperate() {
+        //获取信息
+        String phoneData = requestPhoneData(parameters.getPhoneId());
 
+        if (phoneData == null) {
+            httpRequest(parameters.getCallbackUrl(), 2, "request phone data error");
+            return;
+        }
+        Cache.PHONE.state = Cache.PhoneData.State.READY;
+        Cache.PHONE.data = phoneData;
+        //end
+
+        //启动vpn
+        startPostern();
+
+        //启动目标App
+        startTargetApp();
+
+    }
+
+    private void startPostern() {
+        device.pressHome();
+        // Wait for launcher
+        final String launcherPackage = device.getLauncherPackageName();
+        device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)),
+                LAUNCH_TIMEOUT);
+
+        Intent intent = context.getPackageManager().getLaunchIntentForPackage(BASIC_SAMPLE_PACKAGE);
+        intent.setPackage(null);
+        intent.putExtra("proxyname", parameters.getProxyName());
+        intent.putExtra("proxypass", parameters.getProxyPass());
+        intent.putExtra("proxyserver", parameters.getProxyServer());
+        intent.putExtra("proxyport", Integer.parseInt(parameters.getProxyPort()));
+        context.startActivity(intent);
+        // Wait for the app to appear
+        device.wait(Until.hasObject(By.pkg(BASIC_SAMPLE_PACKAGE).depth(0)),
+                LAUNCH_TIMEOUT);
+        UiObject okButton = device.findObject(new UiSelector()
+                .textMatches("OK|确定")
+                .className("android.widget.Button"));
+
+        // Simulate a user-click on the OK button, if found.
+        try {
+            if (okButton.exists() && okButton.isEnabled()) {
+                okButton.click();
+            }
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        device.pressHome();
+        device.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)),
+                LAUNCH_TIMEOUT);
+    }
+
+    private void startTargetApp() {
+        Intent intent = context.getPackageManager().getLaunchIntentForPackage(parameters.getTargetPkg());
+        if (intent == null) {
+            httpRequest(parameters.getCallbackUrl(), 2, "targetpkg " + parameters.getTargetPkg() + " is not install");
+            return;
+        }
+        intent.setPackage(null);
+        context.startActivity(intent);
+        device.wait(Until.hasObject(By.pkg(parameters.getTargetPkg()).depth(0)),
+                15000);
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void endOperate() {
-
+        if (parameters.getTargetPkg() != null) {
+            try {
+                device.executeShellCommand("am force-stop " + parameters.getTargetPkg());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        PosternApp var7 = (PosternApp) ApplicationProvider.getApplicationContext();
+        PosternVpnService var8 = var7.getVpnService();
+        var8.revertPosternVpnService();
+        httpRequest(parameters.getCallbackUrl(), status, message);
     }
+
 
     //向下滑动
     public void swipeDown(int time) {
