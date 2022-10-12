@@ -17,6 +17,10 @@ import androidx.test.uiautomator.Until;
 import com.tunnelworkshop.postern.PosternApp;
 import com.tunnelworkshop.postern.PosternVpnService;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,8 +32,7 @@ public abstract class ControllerBase {
 
     private static final int LAUNCH_TIMEOUT = 5000;
 
-    private static final String BASIC_SAMPLE_PACKAGE
-            = "com.tunnelworkshop.postern";
+    private static final String BASIC_SAMPLE_PACKAGE = "com.tunnelworkshop.postern";
 
     public UiDevice device;
 
@@ -41,6 +44,7 @@ public abstract class ControllerBase {
 
     public int status = 0;
 
+    @Test
     public void useAppContext() {
         context = ApplicationProvider.getApplicationContext();
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -80,16 +84,34 @@ public abstract class ControllerBase {
     public abstract void autoUiOperate();
 
     public void beginOperate() {
-        //获取信息
+        //获取信息 start
         String phoneData = requestPhoneData(parameters.getPhoneId());
 
         if (phoneData == null) {
             httpRequest(parameters.getCallbackUrl(), 2, "request phone data error");
             return;
         }
+
+        //获取信息 end
+
+        //点击广告
+        JSONObject jsonObject;
+        String clk_url;
+        try {
+            jsonObject = new JSONObject(phoneData);
+            clk_url = jsonObject.getString("clk_url");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        clickAd(parameters.getPhoneId());
+
+
+        //赋值
         Cache.PHONE.state = Cache.PhoneData.State.READY;
         Cache.PHONE.data = phoneData;
-        //end
+
 
         //启动vpn
         startPostern();
@@ -181,10 +203,10 @@ public abstract class ControllerBase {
         device.swipe(x / 2, y / 2, x / 2, (int) (y / 1.2), time);//下滑
     }
 
-    public static void httpRequest(String callbackurl, int status, String message) {
+    public static void httpRequest(String callbackUrl, int status, String message) {
         HttpURLConnection var9 = null;
         try {
-            URL var23 = new URL(callbackurl + "&status=" + status + "&msg=" + URLEncoder.encode(message, "UTF-8"));
+            URL var23 = new URL(callbackUrl + "&status=" + status + "&msg=" + URLEncoder.encode(message, "UTF-8"));
             (var9 = (HttpURLConnection) var23.openConnection()).setReadTimeout(30000);
             var9.setConnectTimeout(30000);
             var9.setRequestMethod("GET");
@@ -210,10 +232,10 @@ public abstract class ControllerBase {
     }
 
 
-    public String requestPhoneData(String phoneid) {
+    public String requestPhoneData(String phoneId) {
         HttpURLConnection var9 = null;
         try {
-            URL var23 = new URL("http://18.141.10.168:54321/get-job?phone-id=" + phoneid);
+            URL var23 = new URL("http://18.141.10.168:54321/get-job?phone-id=" + phoneId);
             (var9 = (HttpURLConnection) var23.openConnection()).setReadTimeout(30000);
             var9.setConnectTimeout(30000);
             var9.setRequestMethod("GET");
@@ -236,6 +258,64 @@ public abstract class ControllerBase {
             }
         }
         return null;
+    }
+
+    private static boolean installNotify(String phoneId) {
+        HttpURLConnection var9 = null;
+        try {
+            URL var23 = new URL("http://18.141.10.168:54321/install-apk?phone-id==" + phoneId);
+            (var9 = (HttpURLConnection) var23.openConnection()).setReadTimeout(30000);
+            var9.setConnectTimeout(30000);
+            var9.setRequestMethod("GET");
+            var9.setDoInput(true);
+            var9.setDoOutput(true);
+            int var22 = var9.getResponseCode();
+
+            if (var22 == 200) {
+                byte[] bytes = getBytes(var9.getInputStream());
+                String json = new String(bytes);
+                System.out.println("Status 200 ok json=" + json);
+                return true;
+            } else {
+                System.out.println("request error code=" + var22);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (var9 != null) {
+                var9.disconnect();
+            }
+        }
+        return false;
+    }
+
+    private static boolean clickAd(String clickUrl) {
+        HttpURLConnection var9 = null;
+        try {
+            URL var23 = new URL(clickUrl);
+            (var9 = (HttpURLConnection) var23.openConnection()).setReadTimeout(30000);
+            var9.setConnectTimeout(30000);
+            var9.setRequestMethod("GET");
+            var9.setDoInput(true);
+            var9.setDoOutput(true);
+            int var22 = var9.getResponseCode();
+
+            if (var22 == 200) {
+                byte[] bytes = getBytes(var9.getInputStream());
+                String json = new String(bytes);
+                System.out.println("Status 200 ok json=" + json);
+                return true;
+            } else {
+                System.out.println("request error code=" + var22);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (var9 != null) {
+                var9.disconnect();
+            }
+        }
+        return false;
     }
 
 

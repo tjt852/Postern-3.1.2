@@ -34,11 +34,6 @@ import java.util.Random;
 @RunWith(AndroidJUnit4.class)
 public class in_mohalla_video extends ControllerBase {
 
-    @Test
-    @Override
-    public void useAppContext() {
-        super.useAppContext();
-    }
 
     @Override
     public void autoUiOperate() {

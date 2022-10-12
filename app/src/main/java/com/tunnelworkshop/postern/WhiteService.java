@@ -65,7 +65,7 @@ public class WhiteService extends Service {
                 if (clientMessenger != null) {
 
                     if (Cache.PHONE.state != Cache.PhoneData.State.READY) {
-                        Log.e("DemoLog", "数据没有准备号，error");
+                        Log.e("DemoLog", "数据未准备好，error");
                         return;
                     }
                     Log.i("DemoLog", "MyService向客户端回信");
@@ -74,10 +74,10 @@ public class WhiteService extends Service {
                     //可以通过Bundle发送跨进程的信息
                     Bundle bundle = new Bundle();
 
-                    String data1 = Cache.PHONE.data;
-                    if (!TextUtils.isEmpty(data1)) {
+                    String sendData = Cache.PHONE.data;
+                    if (!TextUtils.isEmpty(sendData)) {
                         bundle.putString("msg", "OK");
-                        bundle.putString("data", data1);
+                        bundle.putString("data", sendData);
                     } else {
                         bundle.putString("msg", "error");
                     }
@@ -107,7 +107,6 @@ public class WhiteService extends Service {
     @Override
     public void onCreate() {
         Log.i("DemoLog", "MyService -> onCreate");
-//        QUEUE.offer("nihaoya tjt");
         super.onCreate();
     }
 

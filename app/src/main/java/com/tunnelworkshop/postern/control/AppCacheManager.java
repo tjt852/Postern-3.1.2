@@ -16,8 +16,11 @@ import java.io.IOException;
 
 public class AppCacheManager {
 
+    static String endPoint = "https://obs.ru-northwest-2.myhuaweicloud.com";
+    static String ak = "RO3ILGR2YPPUNN90QMGG";
+    static String sk = "egN1DeI5LkYzEppt9ern6zZcMsDkrEaW8aj1xlNO";
 
-    public void restoreCache(){
+    public static void restoreCache(){
         String pkgName = "in.mohalla.video";
         String gaid = "ssdsdfafd";
         String day = "0";
@@ -93,7 +96,7 @@ public class AppCacheManager {
         Log.i("tjt852", "step 13");
     }
 
-    public void saveCache(){
+    public static void saveCache(){
         String pkgName = "in.mohalla.video";
         String gaid = "ssdsdfafd";
         String day = "0";
@@ -129,12 +132,9 @@ public class AppCacheManager {
         FileUtils.delete(sdPath);
     }
 
-
-    public boolean uploadObs(File file) {
+    public static boolean uploadObs(File file) {
         try {
-            String endPoint = "https://obs.ru-northwest-2.myhuaweicloud.com";
-            String ak = "RO3ILGR2YPPUNN90QMGG";
-            String sk = "egN1DeI5LkYzEppt9ern6zZcMsDkrEaW8aj1xlNO";
+
             // 创建ObsClient实例
             ObsClient obsClient = new ObsClient(ak, sk, endPoint);
 
@@ -155,12 +155,8 @@ public class AppCacheManager {
         return true;
     }
 
-    public boolean downloadObs(File file) {
+    public static boolean downloadObs(File file) {
         try {
-            String endPoint = "https://obs.ru-northwest-2.myhuaweicloud.com";
-            String ak = "RO3ILGR2YPPUNN90QMGG";
-            String sk = "egN1DeI5LkYzEppt9ern6zZcMsDkrEaW8aj1xlNO";
-
             // 创建ObsClient实例
             ObsClient obsClient = new ObsClient(ak, sk, endPoint);
             DownloadFileRequest request = new DownloadFileRequest("ssp-cph", "Apk/data/" + file.getName());

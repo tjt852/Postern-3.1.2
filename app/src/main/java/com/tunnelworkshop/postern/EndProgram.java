@@ -22,7 +22,7 @@ public class EndProgram {
             dos.writeBytes("exit\n");
             dos.flush();
             p.waitFor();
-            if(dos!=null)dos.close();
+            dos.close();
             Log.i("DemoLog", " 删除应用程序缓存成功");
         } catch (Exception e) {
             e.printStackTrace();

@@ -252,20 +252,13 @@ public class PosternMain extends Activity {
         };
         this.mDrawerLayout.setDrawerListener(this.mDrawerToggle);
         if (var1 == null) {
-            this.selectItem((AdapterView) null, (View) null, 1, 0L);
+            this.selectItem(null, (View) null, 1, 0L);
         }
 
         this.onMightImportFile(this.getIntent());
 
 //        startService(new Intent(this, WhiteService.class));
 
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                new AppCacheManager().saveCache();
-            }
-        }).start();
 
     }
 
