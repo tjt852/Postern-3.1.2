@@ -11,22 +11,23 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <instrumentation
-        android:name="androidx.test.runner.AndroidJUnitRunner"
-        android:functionalTest="false"
-        android:handleProfiling="false"
-        android:targetPackage="com.tunnelworkshop.postern" />
+
+<!--    <instrumentation-->
+<!--        android:name="androidx.test.runner.AndroidJUnitRunner"-->
+<!--        android:functionalTest="false"-->
+<!--        android:handleProfiling="false"-->
+<!--        android:targetPackage="com.tunnelworkshop.postern" />-->
 
     <uses-permission android:name="android.permission.REORDER_TASKS" />
-    <queries>
-        <package android:name="com.tunnelworkshop.postern" />
-        <package android:name="androidx.test.orchestrator" />
+<!--    <queries>-->
+<!--        <package android:name="com.tunnelworkshop.postern" />-->
+<!--        <package android:name="androidx.test.orchestrator" />-->
 
-        <package android:name="androidx.test.services" />
+<!--        <package android:name="androidx.test.services" />-->
 
-        <package android:name="com.google.android.apps.common.testing.services" />
-        <package android:name="com.google.android.apps.common.testing.services" />
-    </queries>
+<!--        <package android:name="com.google.android.apps.common.testing.services" />-->
+<!--        <package android:name="com.google.android.apps.common.testing.services" />-->
+<!--    </queries>-->
 
     <application
         android:name="com.fakerandroid.boot.FakerApp"
@@ -43,10 +44,13 @@
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-        <uses-library android:name="android.test.runner" />
-        <service android:name=".WhiteService"
+
+
+<!--        <uses-library android:name="android.test.runner" />-->
+        <service
+            android:name=".WhiteService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
         <activity
             android:name=".PosternMain"
@@ -123,12 +127,14 @@
                 <data android:pathPattern=".*\\.conf" />
             </intent-filter>
         </activity>
-        <service
-            android:name=".PosternVpnService"
-            android:permission="android.permission.BIND_VPN_SERVICE">
-            <intent-filter>
-                <action android:name="android.net.VpnService" />
-            </intent-filter>
-        </service>
+
+        <provider
+            android:name=".control.DataContentProvider"
+            android:authorities="com.control.data.provider"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedContentProvider" />
+
+
     </application>
 </manifest>

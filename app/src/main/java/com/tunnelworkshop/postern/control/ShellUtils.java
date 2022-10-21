@@ -1,4 +1,4 @@
-package com.tunnelworkshop.postern;
+package com.tunnelworkshop.postern.control;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

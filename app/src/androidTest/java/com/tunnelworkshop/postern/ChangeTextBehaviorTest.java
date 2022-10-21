@@ -14,6 +14,7 @@ import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.Until;
 
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
@@ -25,7 +26,7 @@ public class ChangeTextBehaviorTest {
     private static final String STRING_TO_BE_TYPED = "UiAutomator";
     private UiDevice device;
 
-    @Before
+    @Test
     public void startMainActivityFromHomeScreen() {
         // Initialize UiDevice instance
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());

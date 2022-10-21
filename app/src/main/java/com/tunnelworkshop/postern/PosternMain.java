@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -322,33 +323,33 @@ public class PosternMain extends Activity {
 
     protected void onStart() {
         super.onStart();
-//        Intent intent = getIntent();
-//        if (intent != null) {
-//            proxyname = intent.getStringExtra("proxyname");
-//            proxypass = intent.getStringExtra("proxypass");
-//            proxyserver = intent.getStringExtra("proxyserver");
-//            proxyport = intent.getIntExtra("proxyport", -1);
-//            Log.d("Postern", "onStart getIntent proxyname="
-//                    + proxyname +
-//                    ", proxypass=" +
-//                    proxypass +
-//                    ", proxyserver=" +
-//                    proxyserver
-//                    + ", proxyport=" +
-//                    proxyport);
-//        }
-//
-//        Log.d("Postern", "onStart");
-//        if (((PosternApp) this.getApplicationContext()).getVpnState() == 0) {
-//            if (!TextUtils.isEmpty(proxyname) &&
-//                    !TextUtils.isEmpty(proxypass) &&
-//                    !TextUtils.isEmpty(proxyserver) &&
-//                    proxyport != -1) {
-//                PosternStart.createProxy(this, proxyname, proxypass, proxyserver, proxyport);
-//                PosternStart.createRule(this);
-//            }
-//            this.launchVpn();
-//        }
+        Intent intent = getIntent();
+        if (intent != null) {
+            proxyname = intent.getStringExtra("proxyname");
+            proxypass = intent.getStringExtra("proxypass");
+            proxyserver = intent.getStringExtra("proxyserver");
+            proxyport = intent.getIntExtra("proxyport", -1);
+            Log.d("Postern", "onStart getIntent proxyname="
+                    + proxyname +
+                    ", proxypass=" +
+                    proxypass +
+                    ", proxyserver=" +
+                    proxyserver
+                    + ", proxyport=" +
+                    proxyport);
+        }
+
+        Log.d("Postern", "onStart");
+        if (((PosternApp) this.getApplicationContext()).getVpnState() == 0) {
+            if (!TextUtils.isEmpty(proxyname) &&
+                    !TextUtils.isEmpty(proxypass) &&
+                    !TextUtils.isEmpty(proxyserver) &&
+                    proxyport != -1) {
+                PosternStart.createProxy(this, proxyname, proxypass, proxyserver, proxyport);
+                PosternStart.createRule(this);
+            }
+            this.launchVpn();
+        }
 
 
     }

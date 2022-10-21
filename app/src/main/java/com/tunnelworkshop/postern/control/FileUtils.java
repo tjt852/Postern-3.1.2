@@ -1,4 +1,4 @@
-package com.tunnelworkshop.postern;
+package com.tunnelworkshop.postern.control;
 
 import android.content.ContentResolver;
 import android.content.res.AssetFileDescriptor;
@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.StatFs;
 import android.text.TextUtils;
+
+import com.tunnelworkshop.postern.ContextHolder;
 
 import java.io.BufferedInputStream;
 import java.io.File;

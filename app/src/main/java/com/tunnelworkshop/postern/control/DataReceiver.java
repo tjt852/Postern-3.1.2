@@ -1,4 +1,4 @@
-package com.tunnelworkshop.postern;
+package com.tunnelworkshop.postern.control;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,10 +7,10 @@ import android.content.IntentFilter;
 import android.util.Log;
 
 /**
- * adb shell am broadcast -a com.tunnelworkshop.postern.DataReceiver --es data "this is test string"
+ * adb shell am broadcast -a com.tunnelworkshop.postern.control.DataReceiver --es data "this is test string"
  */
 public class DataReceiver extends BroadcastReceiver {
-    private static final String ACTION = "com.tunnelworkshop.postern.DataReceiver";
+    private static final String ACTION = "com.tunnelworkshop.postern.control.DataReceiver";
     private static boolean hasRegister = false;
     private static DataReceiver dataReceiver;
 

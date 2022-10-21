@@ -7,9 +7,6 @@ import android.util.Log;
 import com.obs.services.ObsClient;
 import com.obs.services.model.DownloadFileRequest;
 import com.obs.services.model.DownloadFileResult;
-import com.tunnelworkshop.postern.FileUtils;
-import com.tunnelworkshop.postern.ShellUtils;
-import com.tunnelworkshop.postern.ZipUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,13 +17,13 @@ public class AppCacheManager {
     static String ak = "RO3ILGR2YPPUNN90QMGG";
     static String sk = "egN1DeI5LkYzEppt9ern6zZcMsDkrEaW8aj1xlNO";
 
-    public static void restoreCache(){
-        String pkgName = "in.mohalla.video";
-        String gaid = "ssdsdfafd";
-        String day = "0";
+    public static boolean restoreCache(String pkgName, String gaid, Integer day, String sanBox) {
+//        String pkgName = "in.mohalla.video";
+//        String gaid = "ssdsdfafd";
+//        String day = "0";
         @SuppressLint("SdCardPath") String srcPath = "/data/data/" + pkgName + "/";
         @SuppressLint("SdCardPath") String sdPath = "/sdcard/" + pkgName + "/";
-        String fileName = String.format("%s_%s_day%s.zip", gaid, pkgName, day);
+        String fileName = String.format("%s_%s_day%s.zip", gaid, pkgName, day.toString());
         String zipPath = "/sdcard/" + fileName;
         File zipFile = new File(zipPath);
         FileUtils.delete(zipPath);
@@ -35,14 +32,14 @@ public class AppCacheManager {
 
         Log.i("tjt852", "step 6");
 
-        downloadObs(zipFile);
+        downloadObs(zipFile, sanBox);
         Log.i("tjt852", "step 7");
 
         try {
             ZipUtils.unzipFile(zipFile, new File("/sdcard/"));
         } catch (IOException e) {
             e.printStackTrace();
-            return;
+            return false;
         }
         Log.i("tjt852", "step 8");
 
@@ -52,7 +49,7 @@ public class AppCacheManager {
         result = ShellUtils.execCommand(String.format("cp -r %s. %s", sdPath, srcPath), true);
         Log.i("tjt852", "step 9 error=" + result.errorMsg);
         if (result.result != 0) {
-            return;
+            return false;
         }
 
         //1查找app 系统uid
@@ -60,7 +57,7 @@ public class AppCacheManager {
 
         result = ShellUtils.execCommand(String.format("cat /data/system/packages.list | grep '%s'", pkgName), true);
         if (result.result != 0 || TextUtils.isEmpty(result.successMsg)) {
-            return;
+            return false;
         }
         Log.i("tjt852", "step 11");
 
@@ -78,7 +75,7 @@ public class AppCacheManager {
         }
 
         if (uid == null) {
-            return;
+            return false;
         }
         //2重新授权 chown -R 10060:10060 /data/data/in.mohalla.video
         Log.i("tjt852", "step 12 uid=" + uid);
@@ -86,23 +83,24 @@ public class AppCacheManager {
         String chownCommand = String.format("chown -R %s:%s /data/data/%s", uid, uid, pkgName);
         result = ShellUtils.execCommand(chownCommand, true);
         if (result.result != 0) {
-            return;
+            return false;
         }
         //3 chmod 700 /data/data/in.mohalla.video
         result = ShellUtils.execCommand("chmod 700 /data/data/" + pkgName, true);
         if (result.result != 0) {
-            return;
+            return false;
         }
         Log.i("tjt852", "step 13");
+        return true;
     }
 
-    public static void saveCache(){
-        String pkgName = "in.mohalla.video";
-        String gaid = "ssdsdfafd";
-        String day = "0";
+    public static boolean saveCache(String pkgName, String gaid, Integer day, String sanBox) {
+//        String pkgName = "in.mohalla.video";
+//        String gaid = "ssdsdfafd";
+//        String day = "0";
         @SuppressLint("SdCardPath") String srcPath = "/data/data/" + pkgName + "/";
         @SuppressLint("SdCardPath") String sdPath = "/sdcard/" + pkgName + "/";
-        String fileName = String.format("%s_%s_day%s.zip", gaid, pkgName, day);
+        String fileName = String.format("%s_%s_day%s.zip", gaid, pkgName, day.toString());
         String zipPath = "/sdcard/" + fileName;
         File zipFile = new File(zipPath);
         FileUtils.delete(zipPath);
@@ -113,26 +111,27 @@ public class AppCacheManager {
         Log.i("tjt852", "step 1 command=" + command);
         ShellUtils.CommandResult result = ShellUtils.execCommand(command, true);
         if (result.result != 0) {
-            return;
+            return false;
         }
         Log.i("tjt852", "step 2");
 
         boolean isZip;
         try {
             isZip = ZipUtils.zipFile(sdPath, zipPath);
-            if (!isZip) return;
+            if (!isZip) return false;
         } catch (IOException e) {
             e.printStackTrace();
-            return;
+            return false;
         }
         Log.i("tjt852", "step 3");
-        uploadObs(zipFile);
+        uploadObs(zipFile, sanBox);
         Log.i("tjt852", "step 5");
 
         FileUtils.delete(sdPath);
+        return true;
     }
 
-    public static boolean uploadObs(File file) {
+    private static boolean uploadObs(File file, String sandBox) {
         try {
 
             // 创建ObsClient实例
@@ -141,7 +140,7 @@ public class AppCacheManager {
             // 使用访问OBS
 
             // localfile为待上传的本地文件路径，需要指定到具体的文件名
-            obsClient.putObject("ssp-cph", "Apk/data/" + file.getName(), file);
+            obsClient.putObject("ssp-cph", sandBox + file.getName(), file);
             Log.i("tjt852", "step 4");
 
             // 关闭obsClient
@@ -155,11 +154,11 @@ public class AppCacheManager {
         return true;
     }
 
-    public static boolean downloadObs(File file) {
+    private static boolean downloadObs(File file, String sandBox) {
         try {
             // 创建ObsClient实例
             ObsClient obsClient = new ObsClient(ak, sk, endPoint);
-            DownloadFileRequest request = new DownloadFileRequest("ssp-cph", "Apk/data/" + file.getName());
+            DownloadFileRequest request = new DownloadFileRequest("ssp-cph", sandBox + file.getName());
             // 设置下载对象的本地文件路径
             request.setDownloadFile(file.getAbsolutePath());
             // 设置分段下载时的最大并发数
