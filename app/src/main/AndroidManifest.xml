@@ -11,12 +11,14 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.INJECT_EVENTS"
+        tools:ignore="ProtectedPermissions" />
 
-<!--    <instrumentation-->
-<!--        android:name="androidx.test.runner.AndroidJUnitRunner"-->
-<!--        android:functionalTest="false"-->
-<!--        android:handleProfiling="false"-->
-<!--        android:targetPackage="com.tunnelworkshop.postern" />-->
+    <instrumentation
+        android:name="androidx.test.runner.AndroidJUnitRunner"
+        android:functionalTest="false"
+        android:handleProfiling="false"
+        android:targetPackage="com.tunnelworkshop.postern" />
 
     <uses-permission android:name="android.permission.REORDER_TASKS" />
 <!--    <queries>-->
@@ -46,7 +48,7 @@
         </receiver>
 
 
-<!--        <uses-library android:name="android.test.runner" />-->
+        <uses-library android:name="android.test.runner" />
         <service
             android:name=".WhiteService"
             android:enabled="true"

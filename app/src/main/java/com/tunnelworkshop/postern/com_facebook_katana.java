@@ -10,9 +10,11 @@ import androidx.test.uiautomator.Until;
 
 import com.tunnelworkshop.postern.control.AutoUIAppKeep;
 import com.tunnelworkshop.postern.control.AutoUIBase;
+import com.tunnelworkshop.postern.control.XPathInterpreter;
 
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
@@ -22,54 +24,53 @@ import java.util.Random;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class in_mohalla_video extends AutoUIAppKeep {
+public class com_facebook_katana extends AutoUIBase {
 
 
     @Override
     protected String getPackageName() {
-        return "in.mohalla.video";
+        return "com.facebook.katana";
+    }
+
+    @Override
+    public void initParameters() {
+
     }
 
     @Override
     public void autoUiOperate() {
         try {
-            SearchCondition<UiObject2> search = Until.findObject(By.res("in.mohalla.video:id/secondaryText").text("Hindi"));
+            SearchCondition<UiObject2> search = Until.findObject(By.res("com.google.android.gms:id/cancel"));
             UiObject2 selectTxt = device.wait(search, 10000);
             if (selectTxt != null && selectTxt.isEnabled()) {
-                selectTxt.click(4000);
+                selectTxt.click();
             }
-//            Thread.sleep(4000);
-
-            long startTime = System.currentTimeMillis();
-            int minute = new Random().nextInt(4);
-            long runTime = 1000 * 60 * (2 + minute);
-            System.out.println("test running time is " + runTime + " millis");
-            while (true) {
-//                pass(targetpkg);
-                long currentTime = System.currentTimeMillis() - startTime;
-                int p = new Random().nextInt(200);
-
-                if (currentTime > runTime * 0.5) {
-                    System.out.println("上滑 swipeUp");
-                    swipeUp(p);
-                } else {
-                    System.out.println("下滑 swipeDown");
-                    swipeDown(p);
-                }
-
-                if (currentTime > runTime) {
-                    break;
-                }
-                Thread.sleep(2000);
-            }
-            status = 1;
-            message = "success";
-
+            Thread.sleep(1000);
+            UiObject2 uaEdit = XPathInterpreter.findElementByXPath(device,
+                    "//*[@resource-id=\"android:id/content\"]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.widget.EditText[1]");
+            uaEdit.setText("lanslot.tian@163.com");
         } catch (Exception e) {
-            status = 2;
-            message = e.getMessage();
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void beginOperate() {
+        startTargetApp();
+    }
+
+    @Override
+    public void endOperate() {
+        try {
+            device.executeShellCommand("am force-stop " + getPackageName());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void error(ErrorType errorType) {
+
     }
 
     public void pass(String targetpkg) {
