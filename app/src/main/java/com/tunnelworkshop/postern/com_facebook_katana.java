@@ -8,15 +8,12 @@ import androidx.test.uiautomator.SearchCondition;
 import androidx.test.uiautomator.UiObject2;
 import androidx.test.uiautomator.Until;
 
-import com.tunnelworkshop.postern.control.AutoUIAppKeep;
 import com.tunnelworkshop.postern.control.AutoUIBase;
-import com.tunnelworkshop.postern.control.XPathInterpreter;
 
 import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -46,9 +43,11 @@ public class com_facebook_katana extends AutoUIBase {
                 selectTxt.click();
             }
             Thread.sleep(1000);
-            UiObject2 uaEdit = XPathInterpreter.findElementByXPath(device,
-                    "//*[@resource-id=\"android:id/content\"]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.widget.EditText[1]");
-            uaEdit.setText("lanslot.tian@163.com");
+            device.findObjects(By.clazz("android.widget.EditText")).get(0).setText("lanslot.tian@163.com");
+            device.findObjects(By.clazz("android.widget.EditText")).get(1).setText("848419656cd");
+//            UiObject2 uaEdit = XPathInterpreter.findElementByXPath(device,
+//                    "//*[@resource-id=\"android:id/content\"]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.widget.EditText[1]");
+//            uaEdit.setText("lanslot.tian@163.com");
         } catch (Exception e) {
             e.printStackTrace();
         }
