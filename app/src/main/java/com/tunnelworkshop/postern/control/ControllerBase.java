@@ -64,6 +64,7 @@ public abstract class ControllerBase {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         context = ApplicationProvider.getApplicationContext();
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         taskDao = TaskDao.getInstance(context);
@@ -149,10 +150,8 @@ public abstract class ControllerBase {
 
         //第一次激活
         if (taskPo.getDay() == 0) {
-            //点击前启动vpn
-//            startPostern();
             //点击广告,激活的时候才需要点击
-            ClickResult clickResult = ClickAd.clickToReferrer(taskPo.getClickUrl(), taskPo.getDevicePo().getUserAgent());
+            ClickResult clickResult = ClickAd.clickToReferrer2(taskPo.getClickUrl(), taskPo.getDevicePo().getUserAgent(),parameters);
             saveClickState(taskPo, clickResult);
         } else if (taskPo.getDay() > 0) {
             //恢复目标app的沙盒文件
@@ -161,14 +160,15 @@ public abstract class ControllerBase {
             if (!result) {
                 throw new RuntimeException("恢复目标app的沙盒文件失败，请定位问题！！");
             }
-            //下载远程沙盒文件后再启动vpn
-            startPostern();
+
         }
 
         //赋值
 //        Cache.PHONE.state = Cache.PhoneData.State.READY;
 //        Cache.PHONE.data = phoneData;
 
+        //启动vpn
+        startPostern();
 
         //启动目标App
         startTargetApp();
@@ -326,11 +326,11 @@ public abstract class ControllerBase {
         // Wait for the app to appear
         device.wait(Until.hasObject(By.pkg(BASIC_SAMPLE_PACKAGE).depth(0)),
                 LAUNCH_TIMEOUT);
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         UiObject okButton = device.findObject(new UiSelector()
                 .textMatches("OK|确定")
                 .className("android.widget.Button"));

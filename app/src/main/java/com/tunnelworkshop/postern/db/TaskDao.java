@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,7 @@ public class TaskDao {
 
 
     public synchronized Cursor getCursorById(String id) {
+        Log.i("tjt getCursorById", "1");
         SQLiteDatabase db = openDatabase();
         if (db == null) {
             return null;
@@ -126,9 +128,15 @@ public class TaskDao {
         }
 
         sql.append(" LIMIT 1");
+        Log.i("tjt getCursorById", "2");
+
         Cursor cursor = db.rawQuery(sql.toString(), params);
+        Log.i("tjt getCursorById", "3 sql=" + sql + ",cursor=" + cursor);
+
         if (cursor != null && cursor.moveToFirst())
             return cursor;
+        Log.i("tjt getCursorById", "4 null");
+
         return null;
     }
 

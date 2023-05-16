@@ -43,6 +43,8 @@ public class TaskTable {
      */
     public final static String DEVICE_ID = "device_id";
 
+    public final static String BUILD_NUMBER = "build_number";
+
     public final static String CREATE_DATE = "create_date";
 
     public static final String CREATE_SQL = "CREATE TABLE IF NOT EXISTS "
@@ -63,5 +65,6 @@ public class TaskTable {
             + REFERRER + " TEXT, "
             + STATE + " integer, "
             + DEVICE_ID + " integer, "
+            + BUILD_NUMBER + " TEXT, "
             + CREATE_DATE + " UNSIGNED BIG INT);";
 }

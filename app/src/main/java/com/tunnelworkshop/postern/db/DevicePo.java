@@ -59,6 +59,8 @@ public class DevicePo {
 
     private String batteryLevel;
 
+    private String batteryTemp;
+
     private Long lastBootTime;
 
     private String product;
@@ -97,65 +99,6 @@ public class DevicePo {
     private String pe_av;
 
     public DevicePo() {
-    }
-
-    public DevicePo(Integer id, String model, String brand, String deviceType, String operator, String cpuAbi, String buildDisplayId, String btch, String dimSize, String dimYdp, String dimXdp, String dimYpx, String dimXpx, String dimDDpi, String arch, String cpuAbi2, String disk, String sdk, String device, Integer mcc, Integer mnc, String network, Long googleApiVer, String googleApiVerName, String langCode, String language, String batteryLevel, Long lastBootTime, String product, String timezone, String carrier, String advertiserId, String userAgent, String httpAgent, String pe_aa, String pe_ab, String pe_ac, String pe_ad, String pe_ae, String pe_af, String pe_ag, String pe_ah, String pe_ai, String pe_aj, String pe_ak, String pe_al, String pe_am, String pe_an, String pe_ao, String pe_ap, String pe_aq, String pe_ar, String pe_as, String pe_at, String pe_au, String pe_av) {
-        this.id = id;
-        this.model = model;
-        this.brand = brand;
-        this.deviceType = deviceType;
-        this.operator = operator;
-        this.cpuAbi = cpuAbi;
-        this.buildDisplayId = buildDisplayId;
-        this.btch = btch;
-        this.dimSize = dimSize;
-        this.dimYdp = dimYdp;
-        this.dimXdp = dimXdp;
-        this.dimYpx = dimYpx;
-        this.dimXpx = dimXpx;
-        this.dimDDpi = dimDDpi;
-        this.arch = arch;
-        this.cpuAbi2 = cpuAbi2;
-        this.disk = disk;
-        this.sdk = sdk;
-        this.device = device;
-        this.mcc = mcc;
-        this.mnc = mnc;
-        this.network = network;
-        this.googleApiVer = googleApiVer;
-        this.googleApiVerName = googleApiVerName;
-        this.langCode = langCode;
-        this.language = language;
-        this.batteryLevel = batteryLevel;
-        this.lastBootTime = lastBootTime;
-        this.product = product;
-        this.timezone = timezone;
-        this.carrier = carrier;
-        this.advertiserId = advertiserId;
-        this.userAgent = userAgent;
-        this.httpAgent = httpAgent;
-        this.pe_aa = pe_aa;
-        this.pe_ab = pe_ab;
-        this.pe_ac = pe_ac;
-        this.pe_ad = pe_ad;
-        this.pe_ae = pe_ae;
-        this.pe_af = pe_af;
-        this.pe_ag = pe_ag;
-        this.pe_ah = pe_ah;
-        this.pe_ai = pe_ai;
-        this.pe_aj = pe_aj;
-        this.pe_ak = pe_ak;
-        this.pe_al = pe_al;
-        this.pe_am = pe_am;
-        this.pe_an = pe_an;
-        this.pe_ao = pe_ao;
-        this.pe_ap = pe_ap;
-        this.pe_aq = pe_aq;
-        this.pe_ar = pe_ar;
-        this.pe_as = pe_as;
-        this.pe_at = pe_at;
-        this.pe_au = pe_au;
-        this.pe_av = pe_av;
     }
 
     public Integer getId() {
@@ -606,6 +549,14 @@ public class DevicePo {
         this.pe_av = pe_av;
     }
 
+    public String getBatteryTemp() {
+        return batteryTemp;
+    }
+
+    public void setBatteryTemp(String batteryTemp) {
+        this.batteryTemp = batteryTemp;
+    }
+
     public static ContentValues getCVForDevice(DevicePo devicePo) {
         ContentValues contentValues = new ContentValues();
         if (devicePo.getId() != null) {
@@ -637,6 +588,7 @@ public class DevicePo {
         contentValues.put(DeviceTable.LANG_CODE, devicePo.getLangCode());
         contentValues.put(DeviceTable.LANG, devicePo.getLanguage());
         contentValues.put(DeviceTable.BATTERY_LEVEL, devicePo.getBatteryLevel());
+        contentValues.put(DeviceTable.BATTERY_TEMP, devicePo.getBatteryTemp());
         contentValues.put(DeviceTable.LAST_BOOT_TIME, devicePo.getLastBootTime());
         contentValues.put(DeviceTable.PRODUCT, devicePo.getProduct());
         contentValues.put(DeviceTable.TIMEZONE, devicePo.getTimezone());
@@ -699,6 +651,7 @@ public class DevicePo {
         device.setLangCode(cursor.getString(cursor.getColumnIndex(DeviceTable.LANG_CODE)));
         device.setLanguage(cursor.getString(cursor.getColumnIndex(DeviceTable.LANG)));
         device.setBatteryLevel(cursor.getString(cursor.getColumnIndex(DeviceTable.BATTERY_LEVEL)));
+        device.setBatteryTemp(cursor.getString(cursor.getColumnIndex(DeviceTable.BATTERY_TEMP)));
         device.setLastBootTime(cursor.getLong(cursor.getColumnIndex(DeviceTable.LAST_BOOT_TIME)));
         device.setProduct(cursor.getString(cursor.getColumnIndex(DeviceTable.PRODUCT)));
         device.setTimezone(cursor.getString(cursor.getColumnIndex(DeviceTable.TIMEZONE)));

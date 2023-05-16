@@ -61,6 +61,8 @@ public class DeviceTable {
 
     public final static String BATTERY_LEVEL = "battery_level";
 
+    public final static String BATTERY_TEMP = "battery_temp";
+
     public final static String LAST_BOOT_TIME = "last_boot_time";
 
     public final static String PRODUCT = "product";
@@ -129,6 +131,7 @@ public class DeviceTable {
             + LANG_CODE + " TEXT, "
             + LANG + " TEXT, "
             + BATTERY_LEVEL + " TEXT, "
+            + BATTERY_TEMP + " TEXT, "
             + LAST_BOOT_TIME + " UNSIGNED BIG INT, "
             + PRODUCT + " TEXT, "
             + TIMEZONE + " TEXT, "

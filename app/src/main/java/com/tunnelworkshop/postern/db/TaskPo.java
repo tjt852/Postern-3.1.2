@@ -34,6 +34,8 @@ public class TaskPo {
 
     private Long clickTs;
 
+    private String buildNumber;
+
     /**
      * 任务状态 0初始状态 ，1为点击后，需要记录referrer 【（2为激活 3，为留存）暂无】
      */
@@ -177,6 +179,14 @@ public class TaskPo {
         this.clickUrl = clickUrl;
     }
 
+    public String getBuildNumber() {
+        return buildNumber;
+    }
+
+    public void setBuildNumber(String buildNumber) {
+        this.buildNumber = buildNumber;
+    }
+
     public static ContentValues getCVForTask(TaskPo task) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(TaskTable.ID, task.getId());
@@ -193,6 +203,7 @@ public class TaskPo {
         contentValues.put(TaskTable.REFERRER, task.getReferrer());
         contentValues.put(TaskTable.CLICK_TS, task.getClickTs());
         contentValues.put(TaskTable.STATE, task.getState());
+        contentValues.put(TaskTable.STATE, task.getBuildNumber());
         contentValues.put(TaskTable.CREATE_DATE, task.getCreateDate());
         if (task.getDevicePo() != null) {
             contentValues.put(TaskTable.DEVICE_ID, task.getDevicePo().getId());
@@ -217,6 +228,7 @@ public class TaskPo {
         task.setReferrer(cursor.getString(cursor.getColumnIndex(TaskTable.REFERRER)));
         task.setClickTs(cursor.getLong(cursor.getColumnIndex(TaskTable.CLICK_TS)));
         task.setState(cursor.getInt(cursor.getColumnIndex(TaskTable.STATE)));
+        task.setBuildNumber(cursor.getString(cursor.getColumnIndex(TaskTable.BUILD_NUMBER)));
         task.setCreateDate(cursor.getLong(cursor.getColumnIndex(TaskTable.CREATE_DATE)));
         DevicePo device = DevicePo.getDevice(cursor);
         task.setDevicePo(device);

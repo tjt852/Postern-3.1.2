@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +16,7 @@ import com.tunnelworkshop.postern.db.TaskDao;
 public class DataContentProvider extends ContentProvider {
 
     //这里的AUTHORITY就是我们在AndroidManifest.xml中配置的authorities
-    private static final String AUTHORITY = "com.control.center";
+    private static final String AUTHORITY = "com.control.data.provider";
 
     //匹配设备信息成功后的匹配码
     private static final int MATCH_DEVICE_CODE = 100;
@@ -58,7 +59,10 @@ public class DataContentProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
         int match = uriMatcher.match(uri);
+        Log.i("tjt getCursorById preload", "-1");
         if (match == MATCH_TASK_CODE) {
+            Log.i("tjt getCursorById preload", "0");
+
             return taskDao.getCursorById(null);
         }
         return null;
@@ -86,7 +90,7 @@ public class DataContentProvider extends ContentProvider {
         return 0;
     }
 
-    private void notifyChange(){
-        getContext().getContentResolver().notifyChange(NOTIFY_URI,null);
+    private void notifyChange() {
+        getContext().getContentResolver().notifyChange(NOTIFY_URI, null);
     }
 }

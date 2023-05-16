@@ -338,17 +338,22 @@ public class PosternMain extends Activity {
                     + ", proxyport=" +
                     proxyport);
         }
-
         Log.d("Postern", "onStart");
+        if (!TextUtils.isEmpty(proxyname) &&
+                !TextUtils.isEmpty(proxypass) &&
+                !TextUtils.isEmpty(proxyserver) &&
+                proxyport != -1) {
+            PosternStart.createProxy(this, proxyname, proxypass, proxyserver, proxyport);
+            PosternStart.createRule(this);
+        }
         if (((PosternApp) this.getApplicationContext()).getVpnState() == 0) {
-            if (!TextUtils.isEmpty(proxyname) &&
-                    !TextUtils.isEmpty(proxypass) &&
-                    !TextUtils.isEmpty(proxyserver) &&
-                    proxyport != -1) {
-                PosternStart.createProxy(this, proxyname, proxypass, proxyserver, proxyport);
-                PosternStart.createRule(this);
-            }
+
             this.launchVpn();
+        }else{
+//            PosternVpnService var8 = ((PosternApp) this.getApplicationContext()).getVpnService();
+//            if (var8 != null) {
+//                var8.revertPosternVpnService();
+//            }
         }
 
 
