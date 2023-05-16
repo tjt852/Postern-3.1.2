@@ -1,28 +1,18 @@
 package com.tunnelworkshop.postern;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Base64;
 import android.widget.ImageView;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
 import androidx.test.uiautomator.SearchCondition;
-import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObject2;
-import androidx.test.uiautomator.UiObjectNotFoundException;
-import androidx.test.uiautomator.UiSelector;
 import androidx.test.uiautomator.Until;
 
-import com.tunnelworkshop.postern.control.Cache;
-import com.tunnelworkshop.postern.control.ControllerBase;
+import com.tunnelworkshop.postern.control.AutoUIAppKeep;
+import com.tunnelworkshop.postern.control.AutoUIBase;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
@@ -32,8 +22,13 @@ import java.util.Random;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class in_mohalla_video extends ControllerBase {
+public class in_mohalla_video extends AutoUIAppKeep {
 
+
+    @Override
+    protected String getPackageName() {
+        return "in.mohalla.video";
+    }
 
     @Override
     public void autoUiOperate() {

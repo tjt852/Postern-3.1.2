@@ -1,6 +1,5 @@
 package com.tunnelworkshop.postern.control;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
@@ -8,7 +7,6 @@ import android.util.Base64;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.uiautomator.By;
-import androidx.test.uiautomator.UiDevice;
 import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
@@ -23,7 +21,6 @@ import com.tunnelworkshop.postern.db.TaskPo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,15 +32,11 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.concurrent.TimeUnit;
 
-public abstract class ControllerBase {
+public abstract class AutoUIAppKeep extends AutoUIBase{
 
     private static final int LAUNCH_TIMEOUT = 8000;
 
     private static final String BASIC_SAMPLE_PACKAGE = "com.tunnelworkshop.postern";
-
-    public UiDevice device;
-
-    public Context context;
 
     public Parameters parameters;
 
@@ -57,30 +50,13 @@ public abstract class ControllerBase {
 
     public TaskPo taskPo;
 
-    @Test
-    public void useAppContext() {
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        context = ApplicationProvider.getApplicationContext();
-        device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+
+    @Override
+    public void initParameters() {
         taskDao = TaskDao.getInstance(context);
         deviceDao = DeviceDao.getInstance(context);
-        initParameters();
 
-        beginOperate();
-
-        autoUiOperate();
-
-        endOperate();
-
-
-    }
-
-    private void initParameters() {
         Bundle extras = InstrumentationRegistry.getArguments();
         parameters = new Parameters();
         parameters.setProxyName(extras.getString("proxyname"));
@@ -104,9 +80,6 @@ public abstract class ControllerBase {
 
         System.out.println(parameters.toString());
     }
-
-
-    public abstract void autoUiOperate();
 
     public void beginOperate() {
         //获取信息 start
@@ -150,8 +123,10 @@ public abstract class ControllerBase {
 
         //第一次激活
         if (taskPo.getDay() == 0) {
+            //点击前启动vpn
+//            startPostern();
             //点击广告,激活的时候才需要点击
-            ClickResult clickResult = ClickAd.clickToReferrer2(taskPo.getClickUrl(), taskPo.getDevicePo().getUserAgent(),parameters);
+            ClickResult clickResult = ClickAd.clickToReferrer(taskPo.getClickUrl(), taskPo.getDevicePo().getUserAgent());
             saveClickState(taskPo, clickResult);
         } else if (taskPo.getDay() > 0) {
             //恢复目标app的沙盒文件
@@ -160,21 +135,27 @@ public abstract class ControllerBase {
             if (!result) {
                 throw new RuntimeException("恢复目标app的沙盒文件失败，请定位问题！！");
             }
-
+            //下载远程沙盒文件后再启动vpn
+            startPostern();
         }
 
         //赋值
 //        Cache.PHONE.state = Cache.PhoneData.State.READY;
 //        Cache.PHONE.data = phoneData;
 
-        //启动vpn
-        startPostern();
 
         //启动目标App
         startTargetApp();
 
     }
 
+    @Override
+    public void error(ErrorType errorType) {
+        if(errorType==ErrorType.target_app_not_install){
+            httpRequest(parameters.getCallbackUrl(), 2, "targetpkg " + parameters.getTargetPkg() + " is not install");
+        }
+
+    }
 
     /**
      * 保存激活状态
@@ -326,11 +307,11 @@ public abstract class ControllerBase {
         // Wait for the app to appear
         device.wait(Until.hasObject(By.pkg(BASIC_SAMPLE_PACKAGE).depth(0)),
                 LAUNCH_TIMEOUT);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         UiObject okButton = device.findObject(new UiSelector()
                 .textMatches("OK|确定")
                 .className("android.widget.Button"));
@@ -349,22 +330,6 @@ public abstract class ControllerBase {
                 LAUNCH_TIMEOUT);
     }
 
-    private void startTargetApp() {
-        Intent intent = context.getPackageManager().getLaunchIntentForPackage(parameters.getTargetPkg());
-        if (intent == null) {
-            httpRequest(parameters.getCallbackUrl(), 2, "targetpkg " + parameters.getTargetPkg() + " is not install");
-            return;
-        }
-        intent.setPackage(null);
-        context.startActivity(intent);
-        device.wait(Until.hasObject(By.pkg(parameters.getTargetPkg()).depth(0)),
-                15000);
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void endOperate() {
         //关闭目标app
@@ -390,21 +355,6 @@ public abstract class ControllerBase {
 
     }
 
-
-    //向下滑动
-    public void swipeDown(int time) {
-        int x = device.getDisplayWidth();//获取屏幕的宽
-        int y = device.getDisplayHeight();//获取屏幕的高
-        device.swipe(x / 2, (int) (y / 2), x / 2, y / 6, time);//上滑
-    }
-
-
-    //向上滑动
-    public void swipeUp(int time) {
-        int x = device.getDisplayWidth();//获取屏幕的宽
-        int y = device.getDisplayHeight();//获取屏幕的高
-        device.swipe(x / 2, y / 2, x / 2, (int) (y / 1.2), time);//下滑
-    }
 
     public static void httpRequest(String callbackUrl, int status, String message) {
         HttpURLConnection var9 = null;

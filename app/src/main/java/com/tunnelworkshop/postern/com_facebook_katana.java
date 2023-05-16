@@ -24,7 +24,6 @@ import io.appium.uiautomator2.common.exceptions.ElementNotFoundException;
 import io.appium.uiautomator2.common.exceptions.NotImplementedException;
 import io.appium.uiautomator2.model.AccessibleUiObject;
 import io.appium.uiautomator2.model.AndroidElement;
-import io.appium.uiautomator2.model.AppiumUIA2Driver;
 import io.appium.uiautomator2.model.ElementsCache;
 import io.appium.uiautomator2.model.internal.CustomUiDevice;
 import io.appium.uiautomator2.model.internal.ElementsLookupStrategy;
@@ -61,13 +60,10 @@ public class com_facebook_katana extends AutoUIBase {
             Thread.sleep(1000);
             device.findObjects(By.clazz("android.widget.EditText")).get(0).setText("lanslot.tian@163.com");
             device.findObjects(By.clazz("android.widget.EditText")).get(1).setText("848419656cd");
-//            UiObject2 uaEdit = XPathInterpreter.findElementByXPath(device,
-//                    "//*[@resource-id=\"android:id/content\"]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.widget.EditText[1]");
             String xpath = "//*[@resource-id=\"android:id/content\"]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.widget.FrameLayout[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[1]/android.view.ViewGroup[3]";
             AndroidElement element = find(ElementsLookupStrategy.BY_XPATH, xpath);
             element.click();
             Thread.sleep(10000);
-//            uaEdit.setText("lanslot.tian@163.com");
         } catch (Exception e) {
             e.printStackTrace();
         }

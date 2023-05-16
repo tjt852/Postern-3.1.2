@@ -52,7 +52,7 @@ public abstract class AutoUIBase {
     @Test
     public void useAppContext() {
         try {
-            Thread.sleep(5000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
